@@ -1,34 +1,30 @@
-#include <bits/stdc++.h>
+#include <set>
+#include <iostream>
+#include<stdio.h>
+#include<algorithm>
  namespace mini{
 
-const int BUFF_DIM=10;
-
+const int BUFF_DIM=1<<12;
 const long long z=31;
 const long long inv=129032259;
 const long long mod=1e9+7;
 
-struct factor{
-    int pi,lambda,c;
-};
-long long* A_text;
-long long* pot;
-int n;
-/*
-long long pot(int k){
-    if(k==0)return 1;
-    long long h=pot(k>>1);
-    h=(h*h)%mod;
-    if(k&1)h=(h*z)%mod;
-    return h;
-}
-*/
+long long* A_text, *pot;
+char* text;
+int n,log;
 int lcp(int a, int b){
     long long f1=(A_text[a]-(a==0?0:(A_text[a-1]*z)%mod)+mod)%mod;
     long long f2=(A_text[b]-(b==0?0:(A_text[b-1]*z)%mod)+mod)%mod;
-    if(f1!=f2)return -1;
-    int l=0,r=std::min(n-a,n-b);
+    if(text[a]!=text[b])return -1;
+    int l=0,r=std::min({n-a,n-b});
+    bool flag=false;
         while(r-l>1){
-            int m=l+(r-l)/2;
+            int m;
+            if(flag){
+                m=log;
+                flag=false;
+            }
+            else m=l+(r-l)/2;
             f1=(A_text[a+m]-(a==0?0:(A_text[a-1]*pot[m+1])%mod)+mod)%mod;
             f2=(A_text[b+m]-(b==0?0:(A_text[b-1]*pot[m+1])%mod)+mod)%mod;
             if(f1==f2)l=m;
@@ -37,19 +33,36 @@ int lcp(int a, int b){
         return l;
 }
 bool cmp( int a, int b){
-        //ricerca di istar
         int l=lcp(a,b)+1;
         if(l+a>=n)return true;
         if(l+b>=n)return false;
-        return A_text[a+l]<A_text[b+l];
+        return text[a+l]<text[b+l];
     }
-    
-void print(int a, int b, int c){
-
+void print_number(int a){
+    if(a<10){putchar(a+'0');
+    return;}
+    print_number(a/10);
+    putchar(a%10+'0');
 }
-int lz77(char* text, int nn){
+void print(int a, int b, int c){
+    /*
+    putchar('(');
+    print_number(a);
+    putchar(',');
+    print_number(b);
+    putchar(',');
+    putchar(c);
+    putchar(')');
+    */
+   putchar(a);
+   putchar(b);
+   putchar(c);
+}
+int lz77(char* textn, int nn){
     n=nn;
+    log=std::__lg(n);
     A_text=new long long[n];
+    text=textn;
     pot=new long long[n+2];
     A_text[0]=text[0];
     pot[0]=1;
@@ -63,6 +76,7 @@ int lz77(char* text, int nn){
     std::set<int,decltype(cmp)*> bst(cmp);
     int k=0;
     for(int i=0;i<n;){
+        
         auto l=bst.lower_bound(i);
         auto u=bst.upper_bound(i);
         int pi,lambda,c;
@@ -73,29 +87,31 @@ int lz77(char* text, int nn){
         }else if(l==bst.end()){
             lambda=lcp(*u,i)+1;
             pi=*u;
-            c=i+lambda+1>=n?'\0':text[i+lambda+1];
+            c=i+lambda>=n?'\0':text[i+lambda];
         }else if(u==bst.end()){
             lambda=lcp(*l,i)+1;
             pi=*l;
-            c=i+lambda+1>=n?'\0':text[i+lambda+1];
+            c=i+lambda>=n?'\0':text[i+lambda];
         }else{
+            if(l!=bst.begin())l--;
             int lam1=lcp(*l,i)+1;
             int lam2=lcp(*u,i)+1;
             if(lam1>lam2){
                 lambda=lam1;
                 pi=*l;
-                c=i+lambda+1>=n?'\0':text[i+lambda+1];
+                c=i+lambda+1>=n?'\0':text[i+lambda];
             }else{
                 lambda=lam2;
                 pi=*u;
-                c=i+lambda+1>=n?'\0':text[i+lambda+1];
+                c=i+lambda+1>=n?'\0':text[i+lambda];
             }
         }
         print(pi,lambda,c);
+        k++;
         for(int j=0;j<lambda+1;j++){
-            bst.insert(i+j);
+            bst.insert(i);
+            i++;
         }
-        i+=lambda+1;
     }
     return k;
 }
