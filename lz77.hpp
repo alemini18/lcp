@@ -2,7 +2,7 @@
 #include <iostream>
 #include<stdio.h>
 #include<algorithm>
- namespace mini{
+ namespace lz77{
 
 const int BUFF_DIM=1<<12;
 const long long z=31;
@@ -17,7 +17,7 @@ int lcp(int a, int b){
     long long f2=(A_text[b]-(b==0?0:(A_text[b-1]*z)%mod)+mod)%mod;
     if(text[a]!=text[b])return -1;
     int l=0,r=std::min({n-a,n-b});
-    bool flag=false;
+    bool flag=true;
         while(r-l>1){
             int m;
             if(flag){
