@@ -2,11 +2,6 @@
 
 using namespace std;
 
-int main(){
-    srand(time(0));
-    int n=5e5;
-    cout<<n<<endl;
-    for(int i=0;i<n;i++){
-        cout<<rand()%2;
-    }
+int main(int argc, char *argv[]){
+    for(double i=0.001;i<=1;i*=2)cout<<i<<endl;
 }
