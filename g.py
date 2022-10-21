@@ -1,19 +1,26 @@
 import matplotlib.pyplot as plt
 import math
 import numpy as np
+import fileinput as fl
 
 
-
-p=int(input())
-for i in range(0,9):
-    a=input().split()
-    plt.plot(1/float(a[1]),int(a[0])/p,'bo')
-
-x=[0,1000]
-y=[1,1]
-plt.xscale("log")
-plt.yscale("log")
-plt.xlabel("1/epsilon")
-plt.ylabel("ratio")
-plt.plot(x,y)
+ans=["dblp.xml.10MB",  "dna.10MB",  "english.10MB",  "pitches.10MB",  "proteins.10MB",  "sources.10MB"]
+i=1;
+for t in ans:
+    plt.subplot(2,3,i)
+    p=1
+    for line in fl.input(files="ans/"+t):
+        l=line.split()
+        if len(l) == 1:
+            p=int(l[0])
+        else:
+            plt.plot(1/float(l[1]),int(l[0])/p,'bo')
+    x=[0,1000]
+    y=[1,1]
+    plt.plot(x,y)
+    plt.title(t)
+    plt.xscale("log")
+    i=i+1
+plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
+                    wspace=0.35)
 plt.show()
