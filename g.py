@@ -4,9 +4,10 @@ import numpy as np
 import fileinput as fl
 
 
-ans=["dblp.xml.10MB",  "dna.10MB",  "english.10MB",  "pitches.10MB",  "proteins.10MB",  "sources.10MB"]
+pizzachili=["dblp.xml.10MB",  "dna.10MB",  "english.10MB",  "pitches.10MB",  "proteins.10MB",  "sources.10MB"]
+calgary=["bib",  "book1",  "book2",  "geo",  "news",  "obj1",  "obj2",  "paper1",  "paper2",  "progc",  "progl",  "progp",  "trans"]
 i=1;
-for t in ans:
+for t in pizzachili:
     plt.subplot(2,3,i)
     p=1
     for line in fl.input(files="ans/"+t):

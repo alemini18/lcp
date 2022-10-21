@@ -1,4 +1,3 @@
-
 if [[ ! -d $1 ]]
 then
     echo "First argument must be a directory"
@@ -13,6 +12,6 @@ do
     do
         echo $i
         ./lz76 $i < $1/$j  >> ans/$j
-        echo $i >> $j
+        echo $i >> ans/$j
     done
 done
